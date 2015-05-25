@@ -386,6 +386,30 @@ public:
   void get_nns_by_vector(const T* w, size_t n, vector<S>* result) {
     _get_all_nns(w, n, result);
   }
+
+
+  void visit_subtrees(size_t idx, vector<S> * result){
+    // _n_items = number of all nodes
+    //for (size_t i = 0; i < _roots.size(); i++)
+    std::queue <S> q;
+    q.push(_roots[idx]);
+    vector<S> nns;
+    while (!q.empty()) {
+        S i = q.front();
+        const typename Distance::node* nd = _get(i);
+        q.pop();
+        if (nd->n_descendants == 1) {
+        } else if (nd->n_descendants <= _K) {
+	      const S* dst = nd->children;
+	      result->push_back(-1);
+	      result->insert(result->end(), nd->children, &dst[nd->n_descendants]);
+      } else {
+        q.push(nd->children[0]);
+        q.push(nd->children[1]);
+      }
+    }
+  }
+
   S get_n_items() {
     return _n_items;
   }

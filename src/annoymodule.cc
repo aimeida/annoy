@@ -58,6 +58,16 @@ public:
       l.append(result[i]);
     return l;
   }
+
+  python::list visit_subtrees_py(size_t idx) {
+    vector<S> result;
+    this->visit_subtrees(idx, &result);
+    python::list l;
+    for (size_t i = 0; i < result.size(); i++)
+      l.append(result[i]);
+    return l;
+  }
+
   python::list get_item_vector_py(S item) {
     const typename Distance::node* m = this->_get(item);
     const T* v = m->v;
@@ -87,6 +97,7 @@ void expose_methods(python::class_<C> c) {
     .def("get_distance",      &C::get_distance)
     .def("get_nns_by_item",   &C::get_nns_by_item_py)
     .def("get_nns_by_vector", &C::get_nns_by_vector_py)
+    .def("visit_subtrees",    &C::visit_subtrees_py)
     .def("get_item_vector",   &C::get_item_vector_py)
     .def("get_n_items",       &C::get_n_items)
     .def("verbose",           &C::verbose);
